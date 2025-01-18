@@ -1,0 +1,8 @@
+.card3 {
+	/* background-image: url('https://services.meteored.com/img/article/origen-y-evolucion-del-anemometro-1647724650953_1280.jpg') */
+
+	background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.66)),
+		url('https://services.meteored.com/img/article/origen-y-evolucion-del-anemometro-1647724650953_1280.jpg');
+
+	background-size: cover;
+}

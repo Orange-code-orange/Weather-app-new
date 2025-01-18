@@ -1,0 +1,35 @@
+.card {
+	display: grid;
+	grid-template-rows: 70px 260px;
+	width: 330px;
+	height: 330px;
+	border-radius: 20px;
+	overflow: hidden;
+}
+
+.card_title {
+	font-size: 16px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: lightbold;
+	grid-row: 1 / 2;
+	background-color: #00000075;
+	width: 100%;
+	height: 50px;
+	margin-top: -15px;
+	padding-top: 15px;
+	padding-top: 20px;
+	color: rgb(255, 255, 255);
+}
+
+.card_data {
+	margin: 0%;
+	font-size: 60px;
+	text-align: end;
+	justify-self: right;
+	align-self: end;
+	grid-row: 2 / 3;
+	padding-right: 20px;
+	padding-bottom: 1px;
+	color: white;
+}

@@ -1,0 +1,7 @@
+.card4 {
+	background-image: url('');
+
+	background: linear-gradient(rgba(255, 255, 255, 0.641), rgba(0, 0, 0, 0.795)),
+		url('https://www.ngenespanol.com/wp-content/uploads/2023/05/que-es-la-atmosfera-de-que-se-compone-y-cual-es-su-funcion.jpg');
+	background-size: cover;
+}

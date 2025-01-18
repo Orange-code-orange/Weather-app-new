@@ -1,0 +1,42 @@
+:root {
+	--borde-radius: 10px;
+	--border: transparent;
+}
+
+input:focus {
+	outline: none; /* Asegura que no haya contorno adicional */
+}
+
+.search_bar {
+	display: flex; /* Cambiado de grid a flex */
+	width: 100%;
+	height: 30px;
+	align-items: center; /* Asegura que estén centrados verticalmente */
+	justify-content: center;
+}
+
+.input {
+	width: 250px;
+	height: 30px;
+	padding: 0 10px;
+	border-top-left-radius: var(--borde-radius);
+	border-bottom-left-radius: var(--borde-radius);
+	border-right: none;
+	border-top: var(--border);
+	border-bottom: var(--border);
+	border-left: var(--border);
+}
+
+.btn {
+	width: 30px;
+	height: 30px;
+	border-top-right-radius: var(--borde-radius);
+	border-bottom-right-radius: var(--borde-radius);
+	color: white;
+	border: none;
+	font-size: 1.2rem;
+	cursor: pointer;
+	border-right: var(--border);
+	border-top: var(--border);
+	border-bottom: var(--border);
+}

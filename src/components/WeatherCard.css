@@ -1,0 +1,74 @@
+.app-container {
+	width: 100vw;
+	height: 100vh;
+	background: url('https://www.psicologiadelcolor.es/wp-content/uploads/2017/03/cielo_azul.jpg'),
+		linear-gradient(rgba(0, 0, 0, 0.736), rgb(255, 255, 255));
+	background-size: cover;
+	background-blend-mode: overlay;
+	border-color: transparent;
+}
+
+.temp_header {
+	width: 100vw;
+	height: 40vh;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.input_container {
+	width: 100vw;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: end;
+}
+
+.main {
+	width: 100vw;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+	padding: 60px;
+}
+
+/* Media query para pantallas anchas */
+@media (min-width: 1024px) {
+	.main {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 80px;
+		gap: 40px;
+	}
+}
+
+.btn_container {
+	width: 100vw;
+
+	height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 38px;
+	gap: 20px;
+	.btn_set {
+		width: 80px;
+		height: 25px;
+		background-color: #f0f0f0;
+		border: none;
+		border-radius: 10px;
+		font-size: 12px;
+		cursor: pointer;
+		&:hover {
+			background-color: #e0e0e0;
+			width: 83px;
+			height: 33px;
+		}
+	}
+}

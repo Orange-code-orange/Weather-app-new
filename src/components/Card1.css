@@ -1,0 +1,27 @@
+.card1 {
+	background: linear-gradient(rgba(255, 255, 255, 0.5), #00aae4);
+}
+
+.icon {
+	width: 280px;
+	padding: 0%;
+	grid-row: 2 / 3;
+	margin-top: -50px;
+	justify-self: center;
+	align-self: center;
+}
+
+.description {
+	font-size: 16px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	grid-row: 1 / 2;
+	background-color: #0084b0;
+	width: 100%;
+	height: 50px;
+	margin-top: -15px;
+	padding-top: 15px;
+	padding-top: 20px;
+	color: rgb(255, 255, 255);
+}

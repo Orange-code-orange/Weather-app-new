@@ -1,0 +1,63 @@
+:root {
+	--margin-top-temp: 60px;
+	--font-size-temp: 1.4em;
+	--color: rgb(255, 255, 255);
+}
+
+.card__title__temperature {
+	display: grid;
+	height: 13%;
+	grid-template-columns: repeat(3, 33.33%);
+	grid-template-rows: 40px 120px 60px;
+	align-items: center; /* Centra verticalmente */
+	justify-items: center; /* Centra horizontalmente */
+
+	.card__title__temperature-now {
+		grid-column: 1 / 4;
+		grid-row: 2 / 3;
+		font-size: 7em;
+		align-self: center; /* Centra verticalmente */
+		text-align: center; /* Centra el texto horizontalmente */
+		padding-top: 10px;
+		color: var(--color);
+	}
+	.card__title__temperature-max {
+		grid-column: 1 / 2;
+		grid-row: 3 / 3;
+		display: grid;
+		justify-content: center;
+		font-size: var(--font-size-temp);
+		margin-top: var(--margin-top-temp);
+		font-weight: lighter;
+		color: var(--color);
+	}
+	.card__title__temperature-min {
+		grid-column: 3 / 4;
+		grid-row: 3 / 3;
+		display: grid;
+		justify-content: center;
+		font-size: var(--font-size-temp);
+		text-align: center;
+		margin-top: var(--margin-top-temp);
+		font-weight: lighter;
+		color: var(--color);
+	}
+	.card__title__temperature-feels {
+		grid-column: 2 / 3;
+		grid-row: 3 / 3;
+		display: grid;
+		justify-content: center;
+		font-size: var(--font-size-temp);
+		text-align: center;
+		margin-top: var(--margin-top-temp);
+		font-weight: lighter;
+		color: var(--color);
+	}
+
+	.card__title__city {
+		display: grid;
+		grid-column: 1 / 4;
+		grid-row: 1 / 2;
+		color: var(--color);
+	}
+}
