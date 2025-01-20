@@ -173,7 +173,6 @@ function WeatherCard() {
 	return (
 		<>
 			<div className="app-container">
-				{message && <p className="message">{message}</p>}
 				<header className="header">
 					<div className="temp_header">
 						<Head weather={weather} lang={lang} units={units} />
