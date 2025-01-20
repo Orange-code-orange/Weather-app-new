@@ -1,7 +1,7 @@
 .app-container {
 	width: 100vw;
 	height: 100vh;
-	background: url('https://www.psicologiadelcolor.es/wp-content/uploads/2017/03/cielo_azul.jpg'),
+	background: url('../assets/images/cielo_azul.jpg'),
 		linear-gradient(rgba(0, 0, 0, 0.736), rgb(255, 255, 255));
 	background-size: cover;
 	background-blend-mode: overlay;
@@ -45,7 +45,7 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		padding: 80px;
-		gap: 35px;
+		gap: 40px;
 	}
 }
 
