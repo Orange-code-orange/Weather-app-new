@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './WeatherCard.css';
 import axios from 'axios';
-import Loading from './loader/Loading';
+import React from 'react';
 import {
 	thunderstormSvg,
 	drizzleSvg,
@@ -17,6 +17,7 @@ import Card1 from './Card1';
 import Card2 from './Card2';
 import Card3 from './Card3';
 import Card4 from './Card4';
+import Loading from './loader/Loading';
 
 const baseUrl = 'https://api.openweathermap.org/data/2.5/weather?';
 const apiKey = 'f4784fbc84ea157b599cca591457ccd3';
@@ -46,33 +47,39 @@ function WeatherCard() {
 	const [weather, setWeather] = useState(null);
 	const [lang, setLang] = useState('es');
 	const [units, setUnits] = useState('metric');
-	const [cityInput, setCityInput] = useState(null);
+	const [cityInput, setCityInput] = useState('');
 	const [city, setCity] = useState('');
-	const [isLoading, setIsLoading] = useState(true); // Estado de carga
+	const [message, setMessage] = useState('');
+	const [loading, setLoading] = useState(true);
 
 	const handleChange = () => {
-		setLang((prev) => (prev === 'es' ? 'en' : 'es'));
+		setLang(lang === 'es' ? 'en' : 'es');
 	};
 
 	const handleChangeUnits = () => {
-		setUnits((prev) => (prev === 'metric' ? 'imperial' : 'metric'));
+		setUnits(units === 'metric' ? 'imperial' : 'metric');
 	};
 
 	useEffect(() => {
-		try {
-			navigator.geolocation.getCurrentPosition(
-				(res) => {
-					setCoords({ lat: res.coords.latitude, lon: res.coords.longitude });
-				},
-				(err) => {
-					console.log(err);
-					setIsLoading(false); // Deja de cargar si hay error
-				},
-			);
-		} catch (error) {
-			console.log('[GEO API]', error);
-			setIsLoading(false);
-		}
+		navigator.geolocation.getCurrentPosition(
+			(res) => {
+				setCoords({
+					lat: res.coords.latitude,
+					lon: res.coords.longitude,
+				});
+				setMessage('');
+				setLoading(false);
+			},
+			async (err) => {
+				console.log('[Geolocation Error]', err);
+				setMessage(
+					'No aceptaste compartir tu ubicación. Estimaremos tu posición según tu IP, pero podría ser menos precisa.',
+				);
+				const location = await getLocationFromIP();
+				setCoords(location);
+				setLoading(false);
+			},
+		);
 	}, []);
 
 	useEffect(() => {
@@ -81,9 +88,18 @@ function WeatherCard() {
 		}
 	}, [coords, city, units, lang]);
 
+	const getLocationFromIP = async () => {
+		try {
+			const res = await axios.get('https://ipapi.co/json/');
+			return { lat: res.data.latitude, lon: res.data.longitude };
+		} catch (error) {
+			console.log('[IP API Error]', error);
+			return null;
+		}
+	};
+
 	const getWeatherData = async ({ lat, lon }) => {
 		try {
-			setIsLoading(true);
 			const res = await axios.get(
 				`${baseUrl}lat=${lat}&lon=${lon}&appid=${apiKey}&lang=${lang}&units=${units}`,
 			);
@@ -103,9 +119,7 @@ function WeatherCard() {
 				icon: icons[codeKeys.find((k) => conditionCodes[k].includes(codeId))],
 			});
 		} catch (error) {
-			console.log('[WEATHER API]', error);
-		} finally {
-			setIsLoading(false); // Finaliza la carga
+			console.log('[Weather API Error]', error);
 		}
 	};
 
@@ -117,7 +131,6 @@ function WeatherCard() {
 
 	const getWeatherDataByCity = async (city) => {
 		try {
-			setIsLoading(true);
 			const res = await axios.get(
 				`${baseUrl}q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`,
 			);
@@ -137,9 +150,7 @@ function WeatherCard() {
 				icon: icons[codeKeys.find((k) => conditionCodes[k].includes(codeId))],
 			});
 		} catch (error) {
-			console.log('[WEATHER API]', error);
-		} finally {
-			setIsLoading(false); // Finaliza la carga
+			console.log('[Weather API Error]', error);
 		}
 	};
 
@@ -147,7 +158,7 @@ function WeatherCard() {
 		setCityInput(e.target.value);
 	};
 
-	const hadleSubmit = (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (cityInput) {
 			setCity(cityInput);
@@ -155,43 +166,46 @@ function WeatherCard() {
 		}
 	};
 
+	if (loading) {
+		return <Loading />;
+	}
+
 	return (
-		<div className="app-container">
-			{isLoading ? (
-				<Loading /> // Muestra el componente de carga
-			) : (
-				<>
-					<header className="header">
-						<div className="temp_header">
-							<Head weather={weather} lang={lang} units={units} />
-						</div>
-						<div className="input_container">
-							<Input
-								handleCityInput={handleCityInput}
-								lang={lang}
-								units={units}
-								cityInput={cityInput}
-								hadleSubmit={hadleSubmit}
-							/>
-						</div>
-					</header>
-					<div className="btn_container">
-						<button className="btn_set" onClick={handleChange}>
-							{lang === 'es' ? 'English' : 'Español'}
-						</button>
-						<button className="btn_set" onClick={handleChangeUnits}>
-							{units === 'metric' ? 'Imperial' : 'Métrico'}
-						</button>
+		<>
+			<div className="app-container">
+				{message && <p className="message">{message}</p>}
+				<header className="header">
+					<div className="temp_header">
+						<Head weather={weather} lang={lang} units={units} />
 					</div>
-					<main className="main">
-						<Card1 weather={weather} />
-						<Card2 weather={weather} lang={lang} />
-						<Card3 weather={weather} lang={lang} units={units} />
-						<Card4 weather={weather} lang={lang} />
-					</main>
-				</>
-			)}
-		</div>
+					<div className="input_container">
+						<Input
+							handleCityInput={handleCityInput}
+							lang={lang}
+							units={units}
+							cityInput={cityInput}
+							handleSubmit={handleSubmit}
+						/>
+					</div>
+				</header>
+
+				<div className="btn_container">
+					<button className="btn_set" onClick={handleChange} id="btnLang">
+						{lang === 'es' ? 'English' : 'Español'}
+					</button>
+					<button className="btn_set" onClick={handleChangeUnits} id="btnUnits">
+						{units === 'metric' ? 'Imperial' : 'Métrico'}
+					</button>
+				</div>
+
+				<main className="main">
+					<Card1 weather={weather} />
+					<Card2 weather={weather} lang={lang} />
+					<Card3 weather={weather} lang={lang} units={units} />
+					<Card4 weather={weather} lang={lang} />
+				</main>
+			</div>
+		</>
 	);
 }
 
