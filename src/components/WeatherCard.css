@@ -40,11 +40,12 @@
 /* Media query para pantallas anchas */
 @media (min-width: 1024px) {
 	.main {
+		width: 100vw;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: center;
 		padding: 80px;
-		gap: 40px;
+		gap: 35px;
 	}
 }
 

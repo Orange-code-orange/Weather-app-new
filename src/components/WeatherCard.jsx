@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './WeatherCard.css';
 import axios from 'axios';
-import React from 'react';
+import Loading from './loader/Loading';
 import {
 	thunderstormSvg,
 	drizzleSvg,
@@ -40,6 +40,7 @@ const conditionCodes = {
 	clear: [800],
 	clouds: [801, 802, 803, 804],
 };
+
 function WeatherCard() {
 	const [coords, setCoords] = useState(null);
 	const [weather, setWeather] = useState(null);
@@ -47,38 +48,30 @@ function WeatherCard() {
 	const [units, setUnits] = useState('metric');
 	const [cityInput, setCityInput] = useState(null);
 	const [city, setCity] = useState('');
+	const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
 	const handleChange = () => {
-		if (lang === 'es') {
-			setLang('en');
-		} else {
-			setLang('es');
-		}
+		setLang((prev) => (prev === 'es' ? 'en' : 'es'));
 	};
 
 	const handleChangeUnits = () => {
-		if (units === 'metric') {
-			setUnits('imperial');
-		} else {
-			setUnits('metric');
-		}
+		setUnits((prev) => (prev === 'metric' ? 'imperial' : 'metric'));
 	};
 
 	useEffect(() => {
 		try {
 			navigator.geolocation.getCurrentPosition(
 				(res) => {
-					setCoords({
-						lat: res.coords.latitude,
-						lon: res.coords.longitude,
-					});
+					setCoords({ lat: res.coords.latitude, lon: res.coords.longitude });
 				},
 				(err) => {
 					console.log(err);
+					setIsLoading(false); // Deja de cargar si hay error
 				},
 			);
 		} catch (error) {
 			console.log('[GEO API]', error);
+			setIsLoading(false);
 		}
 	}, []);
 
@@ -90,11 +83,10 @@ function WeatherCard() {
 
 	const getWeatherData = async ({ lat, lon }) => {
 		try {
+			setIsLoading(true);
 			const res = await axios.get(
-				baseUrl +
-					`lat=${lat}&lon=${lon}&appid=${apiKey}&lang=${lang}&units=${units}`,
+				`${baseUrl}lat=${lat}&lon=${lon}&appid=${apiKey}&lang=${lang}&units=${units}`,
 			);
-			// console.log(res.data);
 			const codeId = res.data.weather[0].id;
 			const codeKeys = Object.keys(conditionCodes);
 			setWeather({
@@ -112,6 +104,8 @@ function WeatherCard() {
 			});
 		} catch (error) {
 			console.log('[WEATHER API]', error);
+		} finally {
+			setIsLoading(false); // Finaliza la carga
 		}
 	};
 
@@ -123,8 +117,9 @@ function WeatherCard() {
 
 	const getWeatherDataByCity = async (city) => {
 		try {
+			setIsLoading(true);
 			const res = await axios.get(
-				baseUrl + `q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`,
+				`${baseUrl}q=${city}&appid=${apiKey}&lang=${lang}&units=${units}`,
 			);
 			const codeId = res.data.weather[0].id;
 			const codeKeys = Object.keys(conditionCodes);
@@ -143,6 +138,8 @@ function WeatherCard() {
 			});
 		} catch (error) {
 			console.log('[WEATHER API]', error);
+		} finally {
+			setIsLoading(false); // Finaliza la carga
 		}
 	};
 
@@ -158,49 +155,43 @@ function WeatherCard() {
 		}
 	};
 
-	// useEffect(() => {
-	// 	if (weather) {
-	// 		console.log('Weather updated:', weather);
-	// 	}
-	// }, [weather]);
-
 	return (
-		<>
-			<div className="app-container">
-				<header className="header">
-					<div className="temp_header">
-						<Head weather={weather} lang={lang} units={units} />
+		<div className="app-container">
+			{isLoading ? (
+				<Loading /> // Muestra el componente de carga
+			) : (
+				<>
+					<header className="header">
+						<div className="temp_header">
+							<Head weather={weather} lang={lang} units={units} />
+						</div>
+						<div className="input_container">
+							<Input
+								handleCityInput={handleCityInput}
+								lang={lang}
+								units={units}
+								cityInput={cityInput}
+								hadleSubmit={hadleSubmit}
+							/>
+						</div>
+					</header>
+					<div className="btn_container">
+						<button className="btn_set" onClick={handleChange}>
+							{lang === 'es' ? 'English' : 'Español'}
+						</button>
+						<button className="btn_set" onClick={handleChangeUnits}>
+							{units === 'metric' ? 'Imperial' : 'Métrico'}
+						</button>
 					</div>
-
-					<div className="input_container">
-						<Input
-							handleCityInput={handleCityInput}
-							lang={lang}
-							units={units}
-							cityInput={cityInput}
-							hadleSubmit={hadleSubmit}
-						/>
-					</div>
-				</header>
-
-				<div className="btn_container">
-					<button className="btn_set" onClick={handleChange} id="btnLang">
-						{lang === 'es' ? 'English' : 'Español'}
-					</button>
-
-					<button className="btn_set" onClick={handleChangeUnits} id="btnUnits">
-						{units === 'metric' ? 'Imperial' : 'Métrico'}
-					</button>
-				</div>
-
-				<main className="main">
-					<Card1 weather={weather} />
-					<Card2 weather={weather} lang={lang} />
-					<Card3 weather={weather} lang={lang} units={units} />
-					<Card4 weather={weather} lang={lang} />
-				</main>
-			</div>
-		</>
+					<main className="main">
+						<Card1 weather={weather} />
+						<Card2 weather={weather} lang={lang} />
+						<Card3 weather={weather} lang={lang} units={units} />
+						<Card4 weather={weather} lang={lang} />
+					</main>
+				</>
+			)}
+		</div>
 	);
 }
 
