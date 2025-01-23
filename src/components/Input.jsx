@@ -2,9 +2,9 @@ import React from 'react';
 import './Input.css';
 import 'boxicons';
 
-function Input({ handleCityInput, hadleSubmit, cityInput, lang }) {
+function Input({ handleCityInput, handleSubmit, cityInput, lang }) {
 	return (
-		<form className="search_bar" onSubmit={hadleSubmit}>
+		<form className="search_bar" onSubmit={handleSubmit}>
 			<input
 				className="input"
 				type="text"
